@@ -30,7 +30,7 @@ async function run() {
         const toysCollection = client.db('toys').collection('toysCollection')
 
 
-        
+
 
         app.post('/alltoys', async (req, res) => {
             const toys = req.body
@@ -38,17 +38,30 @@ async function run() {
             res.send(result);
         })
 
-        app.get("/toys", async (req, res) => {
-            const cursor = toysCollection.find();
-            const result = await cursor.toArray();
-            res.send(result);
-        });
+        // app.get("/toys", async (req, res) => {
+        //     const cursor = toysCollection.find();
+        //     const result = await cursor.toArray();
+        //     res.send(result);
+        // });
         app.get("/toys/:id", async (req, res) => {
             const id = req.params.id
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const singleToys = await toysCollection.findOne(query)
             res.send(singleToys)
         });
+
+        app.get('/toys', async (req, res) => {
+            console.log(req.query);
+            let query = {}
+            if (req.query?.email) {
+                query = { email: req.query?.email }
+            }
+            console.log(query);
+            const myToy = await toysCollection.find(query).toArray()
+            res.send(myToy);
+
+
+        })
 
         // await client.connect();
 
