@@ -29,6 +29,22 @@ async function run() {
         // Connect the client to the server	(optional starting in v4.7)
         const toysCollection = client.db('toys').collection('toysCollection')
 
+        const indexKeys = { SellerName: 1, ToyName: 1 };
+        const indexOptions = { name: 'sellernameToyname' }
+
+        const result = await toysCollection.createIndex(indexKeys, indexOptions);
+
+        app.get('/toysearchByTitle/:text', async (req, res) => {
+            const searchText = req.params.text;
+            const result = await toysCollection.find({
+                $or: [
+                    { sellerName: { $regex: searchText, $options: 'i' } },
+                    { ToyName: { $regex: searchText, $options: 'i' } },
+                ],
+            }).toArray()
+            res.send(result)
+        })
+
 
 
 
