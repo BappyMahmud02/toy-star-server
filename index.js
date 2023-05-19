@@ -53,6 +53,11 @@ async function run() {
             const result = await toysCollection.insertOne(toys)
             res.send(result);
         })
+        app.get('/alltoys', async(req, res) => {
+            const query = {}
+            const toys = await toysCollection.find(query).toArray()
+            res.send(toys)
+        })
 
         // app.get("/toys", async (req, res) => {
         //     const cursor = toysCollection.find();
@@ -66,12 +71,11 @@ async function run() {
             res.send(singleToys)
         });
 
-        app.get('/toys', async (req, res) => {
+        app.get('/toy/:email', async (req, res) => {
             console.log(req.query);
-            let query = {}
-            if (req.query?.email) {
-                query = { email: req.query?.email }
-            }
+            const email = req.params.email 
+            console.log(email);
+            const query = {sellerEmail: email}
             console.log(query);
             const myToy = await toysCollection.find(query).toArray()
             res.send(myToy);
