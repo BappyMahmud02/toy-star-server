@@ -45,18 +45,18 @@ async function run() {
             res.send(result)
         })
 
-            app.post('/alltoys', async (req, res) => {
+        app.post('/alltoys', async (req, res) => {
             const toys = req.body
             const result = await toysCollection.insertOne(toys)
             res.send(result);
         })
-        app.get('/alltoys', async(req, res) => {
+        app.get('/alltoys', async (req, res) => {
             const query = {}
             const toys = await toysCollection.find(query).toArray()
             res.send(toys)
         })
 
-        
+
         app.get("/toys/:id", async (req, res) => {
             const id = req.params.id
             const query = { _id: new ObjectId(id) }
@@ -66,19 +66,34 @@ async function run() {
 
         app.get('/toy/:email', async (req, res) => {
             console.log(req.query);
-            const email = req.params.email 
+            const email = req.params.email
             console.log(email);
-            const query = {sellerEmail: email}
+            const query = { sellerEmail: email }
             console.log(query);
             const myToy = await toysCollection.find(query).toArray()
             res.send(myToy);
 
 
+        });
+
+
+        app.patch('/toy/:id', async (req, res) => {
+            const id = req.params.id
+            const filter = { _id: new ObjectId(id) };
+            const updateToy = req.body;
+            console.log(updateToy);
+            const updateDoc = {
+                $set: {
+                  status: updateToy.status
+                },
+              };
+            const result = await toysCollection.updateOne(filter, updateDoc);
+            res.send(result)
         })
 
-        app.delete('/toy/:id', async(req, res) => {
+        app.delete('/toy/:id', async (req, res) => {
             const id = req.params.id;
-            const query = {_id: new ObjectId(id)}
+            const query = { _id: new ObjectId(id) }
             const result = await toysCollection.deleteOne(query);
             res.send(result)
 
