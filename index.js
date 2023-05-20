@@ -34,6 +34,12 @@ async function run() {
 
         const result = await toysCollection.createIndex(indexKeys, indexOptions);
 
+        app.get('/alltoys', async (req, res) => {
+            const query = {}
+            const toys = await toysCollection.find(query).toArray()
+            res.send(toys)
+        })
+
         app.get('/toysearchByTitle/:text', async (req, res) => {
             const searchText = req.params.text;
             const result = await toysCollection.find({
@@ -50,11 +56,7 @@ async function run() {
             const result = await toysCollection.insertOne(toys)
             res.send(result);
         })
-        app.get('/alltoys', async (req, res) => {
-            const query = {}
-            const toys = await toysCollection.find(query).toArray()
-            res.send(toys)
-        })
+       
         app.get('/toy', async (req, res) => {
             const query = {}
             const toys = await toysCollection.find(query).toArray()
@@ -80,14 +82,8 @@ async function run() {
 
 
         });
-        // app.get("/update/:id", async (req, res) => {
-        //     const id = req.params.id
-        //     const query = { _id: new ObjectId(id) }
-        //     const updateToys = await toysCollection.findOne(query)
-        //     res.send(updateToys)
-        // });
+      
         
-
 
         app.patch('/toy/:id', async (req, res) => {
             const id = req.params.id
@@ -115,8 +111,8 @@ async function run() {
 
 
         // Send a ping to confirm a successful connection
-        await client.db("admin").command({ ping: 1 });
-        console.log("Pinged your deployment. You successfully connected to MongoDB!");
+        // await client.db("admin").command({ ping: 1 });
+        // console.log("Pinged your deployment. You successfully connected to MongoDB!");
     } finally {
         // Ensures that the client will close when you finish/error
         // await client.close();
