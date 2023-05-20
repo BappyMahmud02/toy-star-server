@@ -55,6 +55,11 @@ async function run() {
             const toys = await toysCollection.find(query).toArray()
             res.send(toys)
         })
+        app.get('/toy', async (req, res) => {
+            const query = {}
+            const toys = await toysCollection.find(query).toArray()
+            res.send(toys)
+        })
 
 
         app.get("/toys/:id", async (req, res) => {
@@ -75,6 +80,13 @@ async function run() {
 
 
         });
+        // app.get("/update/:id", async (req, res) => {
+        //     const id = req.params.id
+        //     const query = { _id: new ObjectId(id) }
+        //     const updateToys = await toysCollection.findOne(query)
+        //     res.send(updateToys)
+        // });
+        
 
 
         app.patch('/toy/:id', async (req, res) => {
